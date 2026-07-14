@@ -4,8 +4,8 @@ export const site = {
   tagline: "Private luxury chauffeur service for the DMV",
   // Set NEXT_PUBLIC_SITE_URL in production; falls back to the planned domain.
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.exclimo.com",
-  phone: "571-525-6666",
-  phoneHref: "tel:+15715256666",
+  phone: "571-678-9209",
+  phoneHref: "tel:+15716789209",
   email: "exclimo1@gmail.com",
   emailHref: "mailto:exclimo1@gmail.com",
   address: {

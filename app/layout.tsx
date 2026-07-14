@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     template: "%s | Exclimo",
   },
   description:
-    "Exclimo is a private luxury chauffeur service for Washington DC, Maryland and Virginia. Flight-tracked transfers at every regional airport (IAD, DCA, BWI and more), corporate travel and special events, with one fixed quote before every ride. Available 24/7. Call 571-525-6666.",
+    "Exclimo is a private luxury chauffeur service for Washington DC, Maryland and Virginia. Flight-tracked transfers at every regional airport (IAD, DCA, BWI and more), corporate travel and special events, with one fixed quote before every ride. Available 24/7. Call (571) 678-9209.",
   keywords: [
     "private chauffeur service DMV",
     "luxury car service Washington DC",
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Exclimo | Private Luxury Chauffeur Service in the DMV",
     description:
-      "Private chauffeured rides across DC, Maryland and Virginia, with a fixed quote before every trip. Call 571-525-6666.",
+      "Private chauffeured rides across DC, Maryland and Virginia, with a fixed quote before every trip. Call (571) 678-9209.",
   },
   robots: {
     index: true,

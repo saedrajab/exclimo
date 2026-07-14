@@ -60,7 +60,7 @@ export default function OpengraphImage() {
             marginTop: 18,
           }}
         >
-          571-525-6666 · Reston, VA
+          (571) 678-9209 · Reston, VA
         </div>
       </div>
     ),
