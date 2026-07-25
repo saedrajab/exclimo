@@ -13,16 +13,28 @@ export function About() {
     <section id="about" className="scroll-mt-24" aria-labelledby="about-heading">
       <div className="mx-auto w-full max-w-[1440px] px-6 py-24 lg:px-10 lg:py-32">
         <div className="grid gap-14 lg:grid-cols-12">
-          <Reveal className="lg:col-span-6">
-            <p className="text-xs font-medium uppercase tracking-[0.35em] text-mute">
-              About Exclimo
-            </p>
-            <h2 id="about-heading" className="display mt-6 text-5xl sm:text-6xl lg:text-7xl">
-              A private company.
-              <br />
-              A personal standard.
-            </h2>
-          </Reveal>
+          <div className="lg:col-span-6">
+            <Reveal>
+              <p className="text-xs font-medium uppercase tracking-[0.35em] text-mute">
+                About Exclimo
+              </p>
+              <h2 id="about-heading" className="display mt-6 text-5xl sm:text-6xl lg:text-7xl">
+                A private company.
+                <br />
+                A personal standard.
+              </h2>
+            </Reveal>
+            <Reveal delay={0.15}>
+              <blockquote className="mt-10 max-w-xl border-l-2 border-ink pl-6">
+                <p className="text-lg leading-relaxed text-charcoal">
+                  From the moment you enter, the pace begins to shift. Every
+                  detail is considered: your name remembered, your preferences
+                  anticipated, your day already underway before you have asked.
+                  This is legendary service; not for a stay, but for a life.
+                </p>
+              </blockquote>
+            </Reveal>
+          </div>
 
           <div className="lg:col-span-5 lg:col-start-8">
             <Reveal delay={0.1}>

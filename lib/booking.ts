@@ -1,5 +1,11 @@
 import { z } from "zod";
-import { site } from "@/lib/site";
+
+export const vehicleTypes = [
+  "First class",
+  "Business",
+  "SUV",
+  "Sprinter van",
+] as const;
 
 export const rideRequestSchema = z.object({
   name: z
@@ -43,6 +49,7 @@ export const rideRequestSchema = z.object({
     .trim()
     .min(3, "Please enter a drop-off location.")
     .max(300, "Please keep the drop-off location under 300 characters."),
+  vehicleType: z.enum(vehicleTypes, "Please choose a vehicle type."),
   passengers: z.coerce
     .number("How many passengers are riding?")
     .int()
@@ -80,6 +87,7 @@ export const fieldOrder = [
   "mapLink",
   "stops",
   "dropoff",
+  "vehicleType",
   "passengers",
   "kids",
   "bags",
@@ -118,6 +126,7 @@ export function buildRideRequestLines(data: RideRequest): string[] {
     ...data.stops.filter(Boolean).map((stop, i) => `Stop ${i + 1}: ${stop}`),
     `Drop-off location: ${data.dropoff}`,
     ``,
+    `Vehicle type: ${data.vehicleType}`,
     `Passengers: ${data.passengers}`,
     `Children: ${data.kids}`,
     `Bags: ${data.bags}`,
@@ -125,15 +134,4 @@ export function buildRideRequestLines(data: RideRequest): string[] {
     data.flight ? `Flight number: ${data.flight}` : "",
     data.notes ? `Notes: ${data.notes}` : "",
   ].filter((line, i, arr) => line !== "" || arr[i - 1] !== "");
-}
-
-/**
- * Build the mailto: URL that opens the visitor's own email app with the
- * request pre-filled. Used as a fallback when server-side sending is
- * unavailable; nothing is sent until the visitor presses send.
- */
-export function buildRideRequestMailto(data: RideRequest): string {
-  const subject = encodeURIComponent(buildRideRequestSubject(data));
-  const body = encodeURIComponent(buildRideRequestLines(data).join("\n"));
-  return `${site.emailHref}?subject=${subject}&body=${body}`;
 }

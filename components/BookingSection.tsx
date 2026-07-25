@@ -4,10 +4,10 @@ import { useState, type ReactNode } from "react";
 import { Plus, X } from "lucide-react";
 import { site } from "@/lib/site";
 import {
-  buildRideRequestMailto,
   fieldOrder,
   rideRequestSchema,
   toFieldErrors,
+  vehicleTypes,
   type FieldErrors,
 } from "@/lib/booking";
 import { sendRideRequest } from "@/lib/actions";
@@ -19,6 +19,7 @@ import {
   PhoneIcon,
 } from "@/components/animated-icons";
 import { Reveal } from "@/components/Reveal";
+import { Select } from "@/components/Select";
 
 const inputCls =
   "h-12 w-full rounded-[18px] border border-transparent bg-canvas px-4 text-[15px] placeholder:text-mute focus:outline-2 focus:outline-ink aria-[invalid=true]:border-[#b00004]";
@@ -32,6 +33,7 @@ type FormValues = {
   pickup: string;
   mapLink: string;
   dropoff: string;
+  vehicleType: string;
   passengers: string;
   kids: string;
   bags: string;
@@ -49,6 +51,7 @@ const initialValues: FormValues = {
   pickup: "",
   mapLink: "",
   dropoff: "",
+  vehicleType: "",
   passengers: "1",
   kids: "0",
   bags: "0",
@@ -135,7 +138,7 @@ export function BookingSection() {
   const [values, setValues] = useState<FormValues>(initialValues);
   const [stops, setStops] = useState<string[]>([]);
   const [errors, setErrors] = useState<FieldErrors>({});
-  const [submitted, setSubmitted] = useState<false | "sent" | "mailto">(false);
+  const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [serverMessage, setServerMessage] = useState<string | null>(null);
   // Honeypot — hidden from humans; a filled value means a bot submitted the form.
@@ -151,7 +154,7 @@ export function BookingSection() {
 
     if (company) {
       // Silently accept bot submissions without sending anything.
-      setSubmitted("sent");
+      setSubmitted(true);
       return;
     }
 
@@ -170,7 +173,7 @@ export function BookingSection() {
     try {
       const result = await sendRideRequest({ ...values, stops });
       if (result.ok) {
-        setSubmitted("sent");
+        setSubmitted(true);
         return;
       }
       if (result.fieldErrors) {
@@ -179,16 +182,14 @@ export function BookingSection() {
         if (firstInvalid) document.getElementById(firstInvalid)?.focus();
         return;
       }
-      if (!result.fallback) {
-        setServerMessage(result.message ?? "Something went wrong. Please call us.");
-        return;
-      }
-      // Server-side sending unavailable — open the visitor's email app instead.
-      setSubmitted("mailto");
-      window.location.href = buildRideRequestMailto(parsed.data);
+      setServerMessage(
+        result.message ??
+          `We could not send your request just now. Please call ${site.phone} or email ${site.email} and our staff will reply with your quote.`
+      );
     } catch {
-      setSubmitted("mailto");
-      window.location.href = buildRideRequestMailto(parsed.data);
+      setServerMessage(
+        `We could not send your request just now. Please call ${site.phone} or email ${site.email} and our staff will reply with your quote.`
+      );
     } finally {
       setSending(false);
     }
@@ -247,37 +248,17 @@ export function BookingSection() {
             <div id="book" className="scroll-mt-28 bg-cloud p-6 sm:p-10">
               {submitted ? (
                 <div aria-live="polite" className="py-10 text-center">
-                  <p className="display text-4xl">
-                    {submitted === "sent" ? "Request received." : "Almost there."}
-                  </p>
+                  <p className="display text-4xl">Request received.</p>
                   <p className="mx-auto mt-4 max-w-md leading-relaxed text-mute">
-                    {submitted === "sent" ? (
-                      <>
-                        Your ride request is on its way to our dispatch team.
-                        We&apos;ll reply to{" "}
-                        <strong className="font-medium text-ink">{values.email}</strong>{" "}
-                        with your personal quote, usually within the hour. In a
-                        hurry? Call{" "}
-                        <a href={site.phoneHref} className="font-medium text-ink underline underline-offset-4">
-                          {site.phone}
-                        </a>
-                        .
-                      </>
-                    ) : (
-                      <>
-                        Your email app just opened with your ride request. Hit send
-                        and we&apos;ll come back with your quote. If it didn&apos;t
-                        open, email{" "}
-                        <a href={site.emailHref} className="font-medium text-ink underline underline-offset-4">
-                          {site.email}
-                        </a>{" "}
-                        or call{" "}
-                        <a href={site.phoneHref} className="font-medium text-ink underline underline-offset-4">
-                          {site.phone}
-                        </a>
-                        .
-                      </>
-                    )}
+                    Your ride request is on its way to our dispatch team.
+                    We&apos;ll reply to{" "}
+                    <strong className="font-medium text-ink">{values.email}</strong>{" "}
+                    with your personal quote, usually within the hour. In a
+                    hurry? Call{" "}
+                    <a href={site.phoneHref} className="font-medium text-ink underline underline-offset-4">
+                      {site.phone}
+                    </a>
+                    .
                   </p>
                   <button
                     type="button"
@@ -452,6 +433,30 @@ export function BookingSection() {
                           onChange={set("dropoff")}
                           aria-invalid={!!errors.dropoff}
                           aria-describedby={errors.dropoff ? "dropoff-error" : undefined}
+                        />
+                      </Field>
+                    </div>
+
+                    <div className="sm:col-span-2">
+                      <Field
+                        id="vehicleType"
+                        label="Vehicle type"
+                        required
+                        error={errors.vehicleType}
+                      >
+                        <Select
+                          id="vehicleType"
+                          value={values.vehicleType}
+                          options={vehicleTypes}
+                          placeholder="Select a vehicle"
+                          onChange={(v) =>
+                            setValues((prev) => ({ ...prev, vehicleType: v }))
+                          }
+                          invalid={!!errors.vehicleType}
+                          describedBy={
+                            errors.vehicleType ? "vehicleType-error" : undefined
+                          }
+                          className={inputCls}
                         />
                       </Field>
                     </div>

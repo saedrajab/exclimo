@@ -6,8 +6,8 @@ export const site = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.exclimo.com",
   phone: "571-678-9209",
   phoneHref: "tel:+15716789209",
-  email: "exclimo1@gmail.com",
-  emailHref: "mailto:exclimo1@gmail.com",
+  email: "exclimollc@gmail.com",
+  emailHref: "mailto:exclimollc@gmail.com",
   address: {
     street: "1578 Cameron Crescent Dr Ste 12",
     city: "Reston",
@@ -24,6 +24,7 @@ export const nav = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
   { label: "Services", href: "#services" },
+  { label: "Fleet", href: "#fleet" },
   { label: "Coverage", href: "#coverage" },
   { label: "FAQ", href: "#faq" },
   { label: "Contact", href: "#contact" },

@@ -53,6 +53,45 @@ export const services: ServiceItem[] = [
   },
 ];
 
+export type FleetVehicle = {
+  name: string;
+  category: string;
+  image: string;
+  passengers: number;
+  luggage: number;
+  description: string;
+};
+
+export const fleet: FleetVehicle[] = [
+  {
+    name: "Mercedes-Benz S-Class",
+    category: "Executive sedan",
+    image: "/mercedes-benz-s-class.png",
+    passengers: 3,
+    luggage: 3,
+    description:
+      "The flagship sedan. A first-class cabin, a whisper-quiet ride and room to work or unwind between doors.",
+  },
+  {
+    name: "Cadillac Escalade",
+    category: "Luxury SUV",
+    image: "/escalade.png",
+    passengers: 6,
+    luggage: 6,
+    description:
+      "Commanding presence with space to spare. The right call for families, small teams and anyone who likes to stretch out.",
+  },
+  {
+    name: "Executive Sprinter Van",
+    category: "Group transport",
+    image: "/van.png",
+    passengers: 12,
+    luggage: 14,
+    description:
+      "First class for the whole group. Wedding parties, corporate teams and airport runs with everyone in one car.",
+  },
+];
+
 export const steps = [
   {
     number: "01",

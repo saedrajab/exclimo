@@ -11,7 +11,7 @@ import { site } from "@/lib/site";
 
 export type SendRideRequestResult =
   | { ok: true }
-  | { ok: false; fieldErrors?: FieldErrors; fallback?: boolean; message?: string };
+  | { ok: false; fieldErrors?: FieldErrors; message?: string };
 
 const WINDOW_MS = 15 * 60 * 1000;
 const MAX_PER_WINDOW = 5;
@@ -62,6 +62,9 @@ export async function sendRideRequest(input: unknown): Promise<SendRideRequestRe
     return { ok: true };
   } catch (error) {
     console.error("[booking] email send failed:", error);
-    return { ok: false, fallback: true, message: "Our booking inbox is briefly unreachable." };
+    return {
+      ok: false,
+      message: `We could not send your request just now. Please call ${site.phone} or email ${site.email} and our staff will reply with your quote.`,
+    };
   }
 }
