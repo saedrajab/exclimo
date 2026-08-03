@@ -105,7 +105,7 @@ function ContactRow({
 }: {
   icon: ReactNode;
   label: string;
-  value: string;
+  value: ReactNode;
   href?: string;
 }) {
   const body = (
@@ -221,8 +221,16 @@ export function BookingSection() {
               <ContactRow
                 icon={<PhoneIcon size={22} />}
                 label="Phone, 24/7"
-                value={site.phone}
-                href={site.phoneHref}
+                value={
+                  <>
+                    <a href={site.phoneHref} className="block hover:underline">
+                      {site.phone}
+                    </a>
+                    <a href={site.phoneAltHref} className="block hover:underline">
+                      {site.phoneAlt}
+                    </a>
+                  </>
+                }
               />
               <ContactRow
                 icon={<MailIcon size={22} />}

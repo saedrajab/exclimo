@@ -25,7 +25,7 @@ const jsonLd = {
         "Private luxury chauffeur service covering Washington DC, Maryland and Virginia. Flight-tracked airport transfers, corporate travel and special events with fixed personal quotes, available 24/7.",
       slogan: "Arrive in excellence.",
       url: site.url,
-      telephone: "+1-(571) 678-9209",
+      telephone: ["+1-571-678-9209", "+1-714-343-6119"],
       email: site.email,
       image: `${site.url}/opengraph-image`,
       address: {

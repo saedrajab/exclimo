@@ -65,6 +65,11 @@ export function Footer() {
                 </a>
               </p>
               <p>
+                <a href={site.phoneAltHref} className="text-white/85 hover:underline">
+                  {site.phoneAlt}
+                </a>
+              </p>
+              <p>
                 <a href={site.emailHref} className="text-white/85 hover:underline">
                   {site.email}
                 </a>
