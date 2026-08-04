@@ -6,7 +6,7 @@ import {
   toFieldErrors,
   type FieldErrors,
 } from "@/lib/booking";
-import { sendBookingEmail } from "@/lib/email";
+import { sendBookingConfirmation, sendBookingEmail } from "@/lib/email";
 import { site } from "@/lib/site";
 
 export type SendRideRequestResult =
@@ -59,7 +59,6 @@ export async function sendRideRequest(input: unknown): Promise<SendRideRequestRe
 
   try {
     await sendBookingEmail(parsed.data);
-    return { ok: true };
   } catch (error) {
     console.error("[booking] email send failed:", error);
     return {
@@ -67,4 +66,16 @@ export async function sendRideRequest(input: unknown): Promise<SendRideRequestRe
       message: `We could not send your request just now. Please call ${site.phone} or email ${site.email} and our staff will reply with your quote.`,
     };
   }
+
+  // The visitor's confirmation copy is a courtesy, not the booking itself.
+  // Dispatch already has the request at this point, so a failure here is
+  // logged and swallowed: telling someone their request failed when it did
+  // not would be worse than a missing confirmation email.
+  try {
+    await sendBookingConfirmation(parsed.data);
+  } catch (error) {
+    console.error("[booking] confirmation email to the visitor failed:", error);
+  }
+
+  return { ok: true };
 }

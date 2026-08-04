@@ -5,6 +5,11 @@ import {
   buildRideRequestSubject,
   type RideRequest,
 } from "@/lib/booking";
+import {
+  buildConfirmationHtml,
+  buildConfirmationSubject,
+  buildConfirmationText,
+} from "@/lib/confirmation-email";
 
 type Transport = { transporter: Transporter; isTestInbox: boolean };
 
@@ -70,5 +75,35 @@ export async function sendBookingEmail(data: RideRequest): Promise<void> {
 
   if (isTestInbox) {
     console.warn("[booking] Ethereal preview:", nodemailer.getTestMessageUrl(info));
+  }
+}
+
+/**
+ * Send the visitor their own copy of the request. Throws if sending fails, so
+ * callers can decide how to treat it; a failure here does not mean the trip
+ * request was lost, only that the courtesy copy did not go out.
+ */
+export async function sendBookingConfirmation(data: RideRequest): Promise<void> {
+  const { transporter, isTestInbox } = await getTransport();
+
+  const from = process.env.BOOKING_FROM_EMAIL ?? process.env.SMTP_USER ?? site.email;
+  const replyTo = process.env.BOOKING_TO_EMAIL ?? site.email;
+
+  const info = await transporter.sendMail({
+    from: `"${site.name}" <${from}>`,
+    // Object form so nodemailer encodes the display name; a visitor's name is
+    // untrusted and must not be able to shape the header itself.
+    to: { name: data.name, address: data.email },
+    replyTo,
+    subject: buildConfirmationSubject(data),
+    text: buildConfirmationText(data),
+    html: buildConfirmationHtml(data),
+  });
+
+  if (isTestInbox) {
+    console.warn(
+      "[booking] Ethereal confirmation preview:",
+      nodemailer.getTestMessageUrl(info)
+    );
   }
 }
